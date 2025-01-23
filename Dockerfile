@@ -1,21 +1,17 @@
-# Etapa 1: Construcción
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore "ChallengePPI.Backend/ChallengePPI.Backend.csproj"
+RUN dotnet build "ChallengePPI.Backend/ChallengePPI.Backend.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "ChallengePPI.Backend/ChallengePPI.Backend.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-
-# Copiar archivos del proyecto
-COPY . ./
-
-# Restaurar dependencias y compilar
-RUN dotnet restore
-RUN dotnet publish -c Release -o /out
-
-# Etapa 2: Imagen final
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-WORKDIR /app
-COPY --from=build /out .
-
-# Exponer el puerto de la aplicación
-EXPOSE 5000
-
-# Comando para iniciar la aplicación
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ChallengePPI.Backend.dll"]
