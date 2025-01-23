@@ -1,0 +1,10 @@
+bin/
+obj/
+*.db
+*.log
+*.user
+*.suo
+.vscode/
+.dockerignore
+.git
+.gitignore
