@@ -1,0 +1,9 @@
+# Ignorar binarios y configuraciones locales
+bin/
+obj/
+*.db
+*.log
+*.user
+*.suo
+.vscode/
+*.env
