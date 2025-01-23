@@ -16,6 +16,7 @@ namespace ChallengePPI.Backend.Controllers
             _context = context;
         }
 
+        // GET: api/orders
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -23,17 +24,68 @@ namespace ChallengePPI.Backend.Controllers
             return Ok(orders);
         }
 
+        // GET: api/orders/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound(new { message = "Order not found." });
+            }
+
+            return Ok(order);
+        }
+
+        // POST: api/orders
         [HttpPost]
         public async Task<IActionResult> CreateOrder(Order order)
         {
-            // Calcular Monto Total
+            // Calculate TotalAmount
             order.TotalAmount = order.Price * order.Quantity;
             order.Status = 0; // "En proceso"
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOrders), new { id = order.Id }, order);
+            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+        }
+
+        // PUT: api/orders/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] Order updatedOrder)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound(new { message = "Order not found." });
+            }
+
+            // Update only the Status field
+            order.Status = updatedOrder.Status;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/orders/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound(new { message = "Order not found." });
+            }
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
