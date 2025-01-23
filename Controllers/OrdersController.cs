@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChallengePPI.Backend.Data;
 using ChallengePPI.Backend.Models;
+using ChallengePPI.Backend.Services;
 
 namespace ChallengePPI.Backend.Controllers
 {
@@ -10,13 +11,14 @@ namespace ChallengePPI.Backend.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly OrderCalculationService _calculationService;
 
-        public OrdersController(AppDbContext context)
+        public OrdersController(AppDbContext context, OrderCalculationService calculationService)
         {
             _context = context;
+            _calculationService = calculationService;
         }
 
-        // GET: api/orders
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -24,7 +26,6 @@ namespace ChallengePPI.Backend.Controllers
             return Ok(orders);
         }
 
-        // GET: api/orders/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
@@ -38,21 +39,31 @@ namespace ChallengePPI.Backend.Controllers
             return Ok(order);
         }
 
-        // POST: api/orders
         [HttpPost]
         public async Task<IActionResult> CreateOrder(Order order)
         {
-            // Calculate TotalAmount
-            order.TotalAmount = order.Price * order.Quantity;
-            order.Status = 0; // "En proceso"
+            var asset = await _context.Assets.FirstOrDefaultAsync(a => a.Name == order.AssetName);
 
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            if (asset == null)
+            {
+                return BadRequest(new { message = "Invalid asset." });
+            }
 
-            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+            try
+            {
+                order.TotalAmount = _calculationService.CalculateTotal(order, asset);
+                order.Status = 0; // "En proceso"
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // PUT: api/orders/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] Order updatedOrder)
         {
@@ -63,7 +74,6 @@ namespace ChallengePPI.Backend.Controllers
                 return NotFound(new { message = "Order not found." });
             }
 
-            // Update only the Status field
             order.Status = updatedOrder.Status;
 
             await _context.SaveChangesAsync();
@@ -71,7 +81,6 @@ namespace ChallengePPI.Backend.Controllers
             return NoContent();
         }
 
-        // DELETE: api/orders/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
