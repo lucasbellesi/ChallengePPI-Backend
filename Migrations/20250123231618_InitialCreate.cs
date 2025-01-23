@@ -37,7 +37,7 @@ namespace ChallengePPI.Backend.Migrations
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     AssetName = table.Column<string>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: true),
                     Operation = table.Column<char>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "TEXT", nullable: false)

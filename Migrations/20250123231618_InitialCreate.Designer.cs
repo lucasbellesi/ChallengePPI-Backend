@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChallengePPI.Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250123212119_InitialCreate")]
+    [Migration("20250123231618_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace ChallengePPI.Backend.Migrations
                     b.Property<char>("Operation")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")
