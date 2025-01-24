@@ -51,6 +51,145 @@ ChallengePPI.Backend/
 ## Uso
 La API estará disponible en `https://localhost:5001`. Puedes usar Swagger para interactuar con los endpoints en `https://localhost:5001/swagger`.
 
+## **Instrucciones para construir y ejecutar con Docker**
+
+### **1. Publicar la aplicación**
+Primero, publica la aplicación en modo Release:
+
+```bash
+dotnet publish -c Release -o out
+```
+
+Esto generará los archivos necesarios en el directorio out.
+
+2. Construir la imagen Docker
+
+Ejecuta el siguiente comando para construir la imagen Docker:
+
+```docker build -t challengeppibackend-app .```
+
+3. Ejecutar el contenedor
+
+Inicia el contenedor y mapea el puerto 8080 del contenedor al puerto 5000 de tu máquina:
+
+```docker run -p 5000:8080 challengeppibackend-app```
+
+El servidor estará disponible en http://localhost:5000.
+
+Probar la API
+
+Endpoints principales
+
+1. Crear una orden
+
+Crea una nueva orden enviando una solicitud POST al endpoint /api/orders.
+
+Ejemplo:
+
+```bash
+curl -X POST http://localhost:5000/api/orders \
+-H "Content-Type: application/json" \
+-d '{
+    "accountId": 1,
+    "assetName": "Apple",
+    "quantity": 10,
+    "price": 177.97,
+    "operation": "Buy",
+    "status": 0
+}'
+```
+
+- Respuesta esperada (201 Created):
+
+```bash
+{
+    "id": 1,
+    "accountId": 1,
+    "assetName": "Apple",
+    "quantity": 10,
+    "price": 177.97,
+    "totalAmount": 1779.7,
+    "operation": "Buy",
+    "status": 0
+}
+```
+
+2. Obtener todas las órdenes
+
+Obtén todas las órdenes enviando una solicitud GET al endpoint /api/orders.
+
+Ejemplo:
+```bash
+curl -X GET http://localhost:5000/api/orders
+```
+
+- Respuesta esperada (200 OK):
+
+```bash
+[
+    {
+        "id": 1,
+        "accountId": 1,
+        "assetName": "Apple",
+        "quantity": 10,
+        "price": 177.97,
+        "totalAmount": 1779.7,
+        "operation": "Buy",
+        "status": 0
+    }
+]
+```
+
+3. Obtener una orden por ID
+
+Obtén una orden específica enviando una solicitud GET al endpoint /api/orders/{id}.
+
+Ejemplo:
+```bash
+curl -X GET http://localhost:5000/api/orders/1
+```
+
+- Respuesta esperada (200 OK):
+
+```bash
+{
+    "id": 1,
+    "accountId": 1,
+    "assetName": "Apple",
+    "quantity": 10,
+    "price": 177.97,
+    "totalAmount": 1779.7,
+    "operation": "Buy",
+    "status": 0
+}
+```
+
+4. Actualizar una orden
+
+Actualiza una orden existente enviando una solicitud PUT al endpoint /api/orders/{id}.
+
+Ejemplo:
+```bash
+curl -X PUT http://localhost:5000/api/orders/1 \
+-H "Content-Type: application/json" \
+-d '{
+    "accountId": 1,
+    "assetName": "Apple",
+    "quantity": 15,
+    "price": 177.97,
+    "operation": "Buy",
+    "status": 1
+}'
+```
+
+- Respuesta esperada (204 No Content):
+
+## Notas
+
+- Si encuentras errores al iniciar el contenedor Docker, asegúrate de que las migraciones se hayan aplicado correctamente.
+
+- Los datos iniciales de la tabla Assets se generan automáticamente al iniciar la aplicación.
+
 ## Contribuciones
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para proponer cambios.
 
