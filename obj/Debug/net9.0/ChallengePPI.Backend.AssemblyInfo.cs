@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChallengePPI.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b86b57f3c58ab1168eccd413f2054c178fbb93d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3726099ce6f2884cea598cb5f0778b2d783608dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChallengePPI.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChallengePPI.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

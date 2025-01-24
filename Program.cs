@@ -30,6 +30,22 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+// Aplicar migraciones automáticamente al inicio
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate(); // Aplica migraciones automáticamente
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al aplicar migraciones: {ex.Message}");
+    }
+}
+
 // Middleware de redirección a HTTPS
 app.UseHttpsRedirection();
 

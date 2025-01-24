@@ -1,17 +1,14 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+# Imagen base: Runtime de ASP.NET para producción
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+
+# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
-EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
-COPY . .
-RUN dotnet restore "./ChallengePPI.Backend.csproj"
-RUN dotnet build "./ChallengePPI.Backend.csproj" -c Release -o /app/build
+# Copiar los archivos publicados al contenedor
+COPY ./out/ .
 
-FROM build AS publish
-RUN dotnet publish "./ChallengePPI.Backend.csproj" -c Release -o /app/publish
+# Exponer el puerto interno que la aplicación utiliza
+EXPOSE 8080
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Configurar el comando de inicio
 ENTRYPOINT ["dotnet", "ChallengePPI.Backend.dll"]
