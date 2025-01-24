@@ -28,8 +28,8 @@ ChallengePPI.Backend/
 
 ## Requisitos
 - **.NET SDK**: [Descargar aquí](https://dotnet.microsoft.com/download)
-- **SQL Server**
-- **Visual Studio** o **Visual Studio Code**
+- **SQLite**
+- **Visual Studio Code**
 
 ## Instalación
 1. Clona este repositorio:
