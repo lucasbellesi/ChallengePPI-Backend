@@ -79,9 +79,7 @@ docker run -p 5000:8080 challengeppibackend-app
 
 El servidor estará disponible en http://localhost:5000.
 
-Probar la API
-
-Endpoints principales
+## Probar la API
 
 ### 1. Crear una orden
 
