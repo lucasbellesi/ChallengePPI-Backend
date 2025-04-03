@@ -7,7 +7,5 @@ obj/
 *.suo
 .vscode/
 *.env
-
-# Ignorar carpetas y archivos de compilación y depuración
-obj/
-bin/
+*.sln
+*.csproj
