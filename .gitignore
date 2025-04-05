@@ -1,6 +1,6 @@
 # Ignorar binarios y configuraciones locales
-bin/
-obj/
+bin
+obj
 *.db
 *.log
 *.user
